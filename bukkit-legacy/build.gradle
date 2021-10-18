@@ -1,0 +1,26 @@
+plugins {
+	id 'com.github.johnrengelman.shadow' version '7.0.0'
+	id 'java'
+}
+
+dependencies {
+	implementation project(path: ':bukkit', configuration: 'shadow')
+	implementation 'com.google.code.gson:gson:2.8.8'
+}
+
+shadowJar {
+	archiveFileName = "CommandBlocker-BukkitLegacy-${project.ext.FULL_VERSION}.jar"
+
+	dependencies {
+		include(dependency('com.google.code.gson:gson:.*'))
+		include(dependency('me.treyruffy.commandblocker:.*'))
+		include(dependency('net.kyori:.*'))
+	}
+
+	relocate 'com.google.gson', 'me.treyruffy.commandblocker.libs.gson'
+	relocate 'net.kyori', 'me.treyruffy.commandblocker.libs.adventure'
+}
+
+artifacts {
+	archives shadowJar
+}

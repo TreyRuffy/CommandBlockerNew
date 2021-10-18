@@ -1,0 +1,53 @@
+plugins {
+	id 'com.github.johnrengelman.shadow' version '7.0.0'
+	id 'java'
+}
+
+repositories {
+	maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+	implementation project(path: ':api')
+
+	implementation('net.kyori:adventure-api:4.9.2')
+
+	implementation('net.kyori:adventure-text-serializer-gson:4.9.2') {
+		exclude(module: 'adventure-bom')
+		exclude(module: 'adventure-api')
+		exclude(module: 'gson')
+	}
+
+	implementation('net.kyori:adventure-text-serializer-legacy:4.9.2') {
+		exclude(module: 'adventure-bom')
+		exclude(module: 'adventure-api')
+	}
+
+	implementation('net.kyori:adventure-text-serializer-plain:4.9.2') {
+		exclude(module: 'adventure-bom')
+		exclude(module: 'adventure-api')
+	}
+
+	implementation "net.kyori:adventure-text-minimessage:4.1.0-SNAPSHOT"
+
+	implementation 'me.carleslc.Simple-YAML:Simple-Yaml:1.7.2'
+	implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
+
+	api 'com.google.code.gson:gson:2.8.8'
+}
+
+shadowJar {
+	archiveFileName = "CommandBlocker-Common-${project.ext.FULL_VERSION}.jar"
+
+	dependencies {
+		include(dependency('commons-io:.*'))
+		include(dependency('me.treyruffy.commandblocker:.*'))
+		include(dependency('me.carleslc.Simple-YAML:.*'))
+		include(dependency('net.kyori:.*'))
+	}
+
+}
+
+artifacts {
+	archives shadowJar
+}

@@ -1,0 +1,35 @@
+plugins {
+	id 'com.github.johnrengelman.shadow' version '7.0.0'
+	id 'net.kyori.blossom' version '1.3.0'
+}
+
+repositories {
+	maven { url 'https://repo.velocitypowered.com/releases/' }
+}
+
+dependencies {
+	implementation project(path: ':common', configuration: 'shadow')
+
+	compileOnly 'com.velocitypowered:velocity-api:3.0.0'
+	annotationProcessor 'com.velocitypowered:velocity-api:3.0.0'
+}
+
+shadowJar {
+	archiveFileName = "CommandBlocker-Velocity-${project.ext.FULL_VERSION}.jar"
+
+	dependencies {
+		include(dependency('me.treyruffy.commandblocker:.*'))
+	}
+
+	relocate 'net.kyori', 'me.treyruffy.commandblocker.libs.adventure'
+	relocate 'org.simpleyaml', 'me.treyruffy.commandblocker.libs.simpleyaml'
+	relocate 'org.yaml', 'me.treyruffy.commandblocker.libs.yaml'
+}
+
+artifacts {
+	archives shadowJar
+}
+
+blossom {
+	replaceToken("@project-version@", project.ext.FULL_VERSION)
+}

@@ -1,0 +1,62 @@
+plugins {
+    id 'java'
+    id 'net.kyori.indra' version '2.0.6'
+    id 'net.kyori.indra.checkstyle' version '2.0.6'
+    id 'net.kyori.indra.git' version '2.0.6'
+    id 'net.kyori.indra.license-header' version '2.0.6'
+}
+
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'maven-publish'
+    apply plugin: 'net.kyori.indra'
+    apply plugin: 'net.kyori.indra.checkstyle'
+    apply plugin: 'net.kyori.indra.git'
+    apply plugin: 'net.kyori.indra.license-header'
+
+    group 'me.treyruffy.commandblocker'
+    version '0.0.1-SNAPSHOT'
+
+    test {
+        useJUnitPlatform {
+            excludeTags 'dependency_checksum'
+        }
+    }
+
+    repositories {
+        mavenCentral()
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+        maven {
+            name "papermc"
+            url "https://papermc.io/repo/repository/maven-public/"
+        }
+        //mavenLocal()
+    }
+
+    dependencies {
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+        testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+        api 'org.jetbrains:annotations:22.0.0'
+
+    }
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+
+    indra {
+        github("TreyRuffy", "CommandBlocker")
+        gpl3OnlyLicense()
+
+        javaVersions {
+            target(8)
+            minimumToolchain(16)
+        }
+    }
+
+    project.ext {
+        //GIT_COMMIT = !indraGit.isPresent() ? "unknown" : indraGit.commit().abbreviate(7).name()
+        FULL_VERSION = "${version}"//.replace("-SNAPSHOT", "-dev-${GIT_COMMIT}")
+    }
+
+}

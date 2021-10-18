@@ -1,0 +1,12 @@
+rootProject.name = 'commandblocker'
+
+include (
+	'api',
+	'common',
+	'bukkit',
+	'bukkit-legacy',
+	'bungee',
+	'nukkit',
+	'sponge',
+	'velocity'
+)

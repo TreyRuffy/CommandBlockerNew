@@ -1,0 +1,4 @@
+name: CommandBlocker
+main: me.treyruffy.commandblocker.nukkit.CommandBlockerNukkit
+version: ${pluginVersion}
+api: ["1.0.0"]

@@ -1,0 +1,37 @@
+plugins {
+	id 'com.github.johnrengelman.shadow' version '7.0.0'
+	id 'java'
+}
+
+dependencies {
+	implementation project(path: ':common', configuration: 'shadow')
+	implementation 'net.md-5:bungeecord-api:1.16-R0.4'
+	implementation('net.kyori:adventure-platform-bungeecord:4.0.0') {
+		exclude(module: 'adventure-bom')
+		exclude(module: 'adventure-api')
+		exclude(module: 'adventure-nbt')
+	}
+}
+
+shadowJar {
+	archiveFileName = "CommandBlocker-Bungee-${project.ext.FULL_VERSION}.jar"
+
+	dependencies {
+		include(dependency('me.treyruffy.commandblocker:.*'))
+		include(dependency('net.kyori:.*'))
+	}
+
+	relocate 'net.kyori', 'me.treyruffy.commandblocker.libs.adventure'
+	relocate 'org.simpleyaml', 'me.treyruffy.commandblocker.libs.simpleyaml'
+	relocate 'org.yaml', 'me.treyruffy.commandblocker.libs.yaml'
+}
+
+artifacts {
+	archives shadowJar
+}
+
+processResources {
+	filesMatching('bungee.yml') {
+		expand 'pluginVersion': project.ext.FULL_VERSION
+	}
+}

@@ -1,0 +1,7 @@
+name: CommandBlocker
+main: me.treyruffy.commandblocker.bukkit.CommandBlockerBukkit
+version: ${pluginVersion}
+api-version: 1.16
+
+softdepend:
+  - PlaceholderAPI

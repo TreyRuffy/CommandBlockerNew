@@ -1,0 +1,36 @@
+plugins {
+	id 'com.github.johnrengelman.shadow' version '7.0.0'
+}
+
+repositories {
+	mavenLocal()
+	maven { url 'https://repo.nukkitx.com/main/' }
+}
+
+dependencies {
+	implementation project(path: ':common', configuration: 'shadow')
+
+	compileOnly 'cn.nukkit:nukkit:1.0-SNAPSHOT'
+}
+
+shadowJar {
+	archiveFileName = "CommandBlocker-Nukkit-${project.ext.FULL_VERSION}.jar"
+
+	dependencies {
+		include(dependency('me.treyruffy.commandblocker:.*'))
+	}
+
+	relocate 'net.kyori', 'me.treyruffy.commandblocker.libs.adventure'
+	relocate 'org.simpleyaml', 'me.treyruffy.commandblocker.libs.simpleyaml'
+	relocate 'org.yaml', 'me.treyruffy.commandblocker.libs.yaml'
+}
+
+artifacts {
+	archives shadowJar
+}
+
+processResources {
+	filesMatching('plugin.yml') {
+		expand 'pluginVersion': project.ext.FULL_VERSION
+	}
+}
