@@ -10,20 +10,20 @@ repositories {
 dependencies {
 	implementation project(path: ':api')
 
-	implementation('net.kyori:adventure-api:4.9.2')
+	implementation('net.kyori:adventure-api:4.9.3')
 
-	implementation('net.kyori:adventure-text-serializer-gson:4.9.2') {
+	implementation('net.kyori:adventure-text-serializer-gson:4.9.3') {
 		exclude(module: 'adventure-bom')
 		exclude(module: 'adventure-api')
 		exclude(module: 'gson')
 	}
 
-	implementation('net.kyori:adventure-text-serializer-legacy:4.9.2') {
+	implementation('net.kyori:adventure-text-serializer-legacy:4.9.3') {
 		exclude(module: 'adventure-bom')
 		exclude(module: 'adventure-api')
 	}
 
-	implementation('net.kyori:adventure-text-serializer-plain:4.9.2') {
+	implementation('net.kyori:adventure-text-serializer-plain:4.9.3') {
 		exclude(module: 'adventure-bom')
 		exclude(module: 'adventure-api')
 	}
@@ -33,7 +33,7 @@ dependencies {
 	implementation 'me.carleslc.Simple-YAML:Simple-Yaml:1.7.2'
 	implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
 
-	api 'com.google.code.gson:gson:2.8.8'
+	api 'com.google.code.gson:gson:2.8.9'
 }
 
 shadowJar {

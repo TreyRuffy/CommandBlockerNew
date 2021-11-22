@@ -16,8 +16,13 @@
  */
 package me.treyruffy.commandblocker.common;
 
-import me.treyruffy.commandblocker.common.config.Configuration;
-import me.treyruffy.commandblocker.common.config.ConfigurationFiles;
+import java.util.Collections;
+import java.util.UUID;
+import me.treyruffy.commandblocker.api.Command;
+import me.treyruffy.commandblocker.api.CommandBlocker;
+import me.treyruffy.commandblocker.api.CommandBlockerTypes;
+import me.treyruffy.commandblocker.api.config.Configuration;
+import me.treyruffy.commandblocker.api.config.ConfigurationFiles;
 
 /**
  * The main CommandBlocker common class.
@@ -33,13 +38,18 @@ public class CommandBlockerCommon {
         if (this.debug()) {
             final CommandBlockerValues commandBlockerValues = Universal.get().universalMethods();
             final Configuration.ConfigurationOptions configuration =
-                    Universal.get().configuration().getConfiguration(ConfigurationFiles.CONFIGURATION);
+                    Configuration.getConfiguration(ConfigurationFiles.CONFIGURATION);
             if (configuration.get("Testing.Debug") == null) {
                 configuration.set("Testing.Debug", true, "This is a test in order to make sure configuration works "
                         + "properly");
                 configuration.save();
             }
             commandBlockerValues.log().info("Testing Debug: " + configuration.getString("Testing.Debug"));
+
+            final String[] command = new String[] {"testing123", "test2"};
+            CommandBlocker.addBlockedCommand(CommandBlockerTypes.REGULAR_PLAYERS, new Command(command, null,
+                null, null, null, null, Collections.singletonList(UUID.randomUUID()),
+                null, null, null, null));
         }
     }
 

@@ -30,7 +30,7 @@ public interface TranslateVariables {
      * @param message the component to translate
      * @return the translated component
      */
-    Component translateVariables(Component message);
+    Component translateVariables(String message);
 
     /**
      * Translates player variables from a component.
@@ -39,7 +39,7 @@ public interface TranslateVariables {
      * @param player the player to translate for
      * @return the translated component
      */
-    Component translateVariables(Component message, Object player);
+    Component translateVariables(String message, Object player);
 
     /**
      * Translates player variables from a component with additional variables.
@@ -49,7 +49,7 @@ public interface TranslateVariables {
      * @param additionalVariables additional placeholders to translate in the text
      * @return the translated component
      */
-    Component translateVariables(Component message, Object player, HashMap<String, String> additionalVariables,
+    Component translateVariables(String message, Object player, HashMap<String, String> additionalVariables,
                                  HashMap<String, Component> additionalComponentVariables);
 
 }

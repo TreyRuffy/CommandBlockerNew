@@ -16,8 +16,9 @@
  */
 package me.treyruffy.commandblocker.common;
 
-import me.treyruffy.commandblocker.common.config.Configuration;
-import me.treyruffy.commandblocker.common.config.ConfigurationFiles;
+import me.treyruffy.commandblocker.api.CommandBlocker;
+import me.treyruffy.commandblocker.api.config.Configuration;
+import me.treyruffy.commandblocker.api.config.ConfigurationFiles;
 import me.treyruffy.commandblocker.common.config.UpdateConfigurations;
 
 /**
@@ -27,6 +28,7 @@ public class Universal {
 
     private static Universal instance = null;
     private CommandBlockerValues commandBlockerValues;
+    private CommandBlocker commandBlocker;
 
     /**
      * Gets the Universal class.
@@ -57,7 +59,7 @@ public class Universal {
         this.commandBlockerValues = commandBlockerValues;
         this.commandBlockerValues.setupMetrics();
 
-        this.configuration().getConfiguration(ConfigurationFiles.CONFIGURATION); // Sets up the configuration files.
+        Configuration.getConfiguration(ConfigurationFiles.CONFIGURATION); // Sets up the configuration files.
         new UpdateConfigurations().updateAll();
 
         return this;
@@ -73,12 +75,12 @@ public class Universal {
     }
 
     /**
-     * Gets the configuration.
+     * Gets the Command Blocker API.
      *
-     * @return the configuration
+     * @return the Command Blocker API class
      */
-    public Configuration configuration() {
-        return new Configuration();
+    public CommandBlocker commandBlocker() {
+        return this.commandBlocker;
     }
 
 }

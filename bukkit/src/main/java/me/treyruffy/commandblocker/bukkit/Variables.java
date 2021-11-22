@@ -22,8 +22,11 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import me.treyruffy.commandblocker.common.TranslateVariables;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The Bukkit variable translator.
@@ -31,22 +34,21 @@ import org.bukkit.entity.Player;
 public class Variables implements TranslateVariables {
 
     @Override
-    public Component translateVariables(final Component message) {
+    public Component translateVariables(final String message) {
         return this.translateVariables(message, null);
     }
 
     @Override
-    public Component translateVariables(final Component message, final Object player) {
+    public Component translateVariables(final String message, final Object player) {
         return this.translateVariables(message, player, null, null);
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public Component translateVariables(final Component message, final Object player,
-                                        final HashMap<String, String> additionalVariables,
-                                        final HashMap<String, Component> additionalComponentVariables) {
-
-        String messageToString = MiniMessage.get().serialize(message);
+    public Component translateVariables(@NotNull final String message, final Object player,
+                                        @Nullable final HashMap<String, String> additionalVariables,
+                                        @Nullable final HashMap<String, Component> additionalComponentVariables) {
+        String messageToString = ChatColor.translateAlternateColorCodes('&', message);
 
         if (player instanceof OfflinePlayer) {
             final OfflinePlayer offlinePlayer = (OfflinePlayer) player;

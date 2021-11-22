@@ -47,14 +47,16 @@ public class CommandBlockerBukkit extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        adventure = BukkitAudiences.create(this);
         Universal.get().setup(new SetupValues());
         commandBlockerValues = Universal.get().universalMethods();
-        adventure = BukkitAudiences.create(this);
         commandBlockerValues.log().info("Loaded correctly");
         new CommandBlockerCommon().test();
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             this.placeholderApiEnabled = true;
         }
+
+        Bukkit.getPluginManager().registerEvents(new CommandListener(), this);
     }
 
     /**
@@ -86,6 +88,10 @@ public class CommandBlockerBukkit extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (adventure != null) {
+            adventure.close();
+            adventure = null;
+        }
         commandBlockerValues.log().info("Unloaded correctly");
     }
 

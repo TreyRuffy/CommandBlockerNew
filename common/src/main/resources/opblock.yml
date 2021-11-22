@@ -23,7 +23,7 @@
 
 DisabledOpCommands: []
 #Please leave this commented out. If you want to add commands, remove the [].
-    #NoBlockedOpCommands:
-        #Message: '&cThis is commented out because most people do not want to block OP commands.'
-        #PlayerCommands:
-        #- tell %player% You are not able to do this.
+  #NoBlockedOpCommands:
+    #Message: <red>This is commented out because most people do not want to block OP commands.
+    #PlayerCommands:
+    #- tell %player% You are not able to do this.

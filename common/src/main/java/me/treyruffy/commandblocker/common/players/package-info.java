@@ -14,28 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package me.treyruffy.commandblocker.common.config;
-
 /**
- * The different types of configuration files.
+ * Universal player classes.
  */
-public enum ConfigurationFiles {
-
-    /**
-     * Config.yml
-     */
-    CONFIGURATION,
-    /**
-     * Disabled.yml
-     */
-    BLOCKED,
-    /**
-     * Opblock.yml
-     */
-    OPBLOCKED,
-    /**
-     * Messages.yml
-     */
-    MESSAGES
-
-}
+package me.treyruffy.commandblocker.common.players;

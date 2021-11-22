@@ -4,9 +4,9 @@ include (
 	'api',
 	'common',
 	'bukkit',
-	'bukkit-legacy',
-	'bungee',
-	'nukkit',
-	'sponge',
-	'velocity'
+	//'bukkit-legacy',
+	//'bungee',
+	//'nukkit',
+	//'sponge',
+	//'velocity'
 )

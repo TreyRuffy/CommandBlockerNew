@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package me.treyruffy.commandblocker.common.config;
+package me.treyruffy.commandblocker.api.config;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,6 +22,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
+import me.treyruffy.commandblocker.api.CommandBlocker;
+import org.simpleyaml.configuration.ConfigurationSection;
 import org.simpleyaml.configuration.comments.CommentType;
 import org.simpleyaml.configuration.file.YamlFile;
 import org.simpleyaml.exceptions.InvalidConfigurationException;
@@ -30,20 +32,24 @@ import org.simpleyaml.exceptions.InvalidConfigurationException;
  * The configuration for CommandBlocker.
  */
 @SuppressWarnings("checkstyle:MethodName")
-public class Configuration {
+public final class Configuration {
 
-    YamlFile currentConfiguration;
-    File currentConfigurationLoader;
+    private Configuration() {
+        // Do nothing
+    }
 
-    YamlFile rootConfig;
-    YamlFile rootBlocked;
-    YamlFile rootOpBlocked;
-    YamlFile rootMessages;
+    static YamlFile currentConfiguration;
+    static File currentConfigurationLoader;
 
-    File configLoader;
-    File blockedLoader;
-    File opBlockedLoader;
-    File messagesLoader;
+    static YamlFile rootConfig;
+    static YamlFile rootBlocked;
+    static YamlFile rootOpBlocked;
+    static YamlFile rootMessages;
+
+    static File configLoader;
+    static File blockedLoader;
+    static File opBlockedLoader;
+    static File messagesLoader;
 
     /**
      * Gets the configuration.
@@ -51,27 +57,31 @@ public class Configuration {
      * @param configurationFile the configuration file
      * @return the configuration
      */
-    public ConfigurationOptions getConfiguration(final ConfigurationFiles configurationFile) {
-        if (this.rootConfig == null || this.rootBlocked == null || this.rootOpBlocked == null || this.rootMessages == null) {
-            new ConfigurationOptions().reload();
+    public static ConfigurationOptions getConfiguration(final ConfigurationFiles configurationFile) {
+        if (rootConfig == null || rootBlocked == null || rootOpBlocked == null || rootMessages == null) {
+            try {
+                new ConfigurationOptions().reload();
+            } catch (final IOException e) {
+                e.printStackTrace();
+            }
         }
         switch (configurationFile) {
             case CONFIGURATION:
-                this.currentConfiguration = this.rootConfig;
-                this.currentConfigurationLoader = this.configLoader;
+                currentConfiguration = rootConfig;
+                currentConfigurationLoader = configLoader;
                 break;
             case BLOCKED:
-                this.currentConfiguration = this.rootBlocked;
-                this.currentConfigurationLoader = this.blockedLoader;
+                currentConfiguration = rootBlocked;
+                currentConfigurationLoader = blockedLoader;
                 break;
             case OPBLOCKED:
-                this.currentConfiguration = this.rootOpBlocked;
-                this.currentConfigurationLoader = this.opBlockedLoader;
+                currentConfiguration = rootOpBlocked;
+                currentConfigurationLoader = opBlockedLoader;
                 break;
             case MESSAGES:
             default:
-                this.currentConfiguration = this.rootMessages;
-                this.currentConfigurationLoader = this.messagesLoader;
+                currentConfiguration = rootMessages;
+                currentConfigurationLoader = messagesLoader;
                 break;
         }
         return new ConfigurationOptions();
@@ -80,15 +90,26 @@ public class Configuration {
     /**
      * Options for a configuration set.
      */
-    public final class ConfigurationOptions {
+    public static final class ConfigurationOptions {
         final File commandBlockerFolder = new File("plugins" + File.separator + "CommandBlocker");
+
+        /**
+         * Gets the folder where the configuration files are.
+         *
+         * @return the folder which holds the configuration files
+         */
+        public File commandBlockerFolder() {
+            return this.commandBlockerFolder;
+        }
 
         /**
          * Reloads the configuration file.
          */
-        public void reload() {
-            if (!this.commandBlockerFolder.exists()) this.commandBlockerFolder.mkdirs();
-
+        public void reload() throws IOException {
+            if (!this.commandBlockerFolder.exists())
+                if (!this.commandBlockerFolder.mkdirs()) {
+                    throw new IOException("Directory not created");
+                }
             if (!new File(this.commandBlockerFolder, "config.yml").exists()) {
                 try {
                     Files.copy(Objects.requireNonNull(Configuration.class.getResourceAsStream("/config.yml")),
@@ -125,53 +146,55 @@ public class Configuration {
                 }
             }
 
-            Configuration.this.rootConfig = new YamlFile("plugins/CommandBlocker/config.yml");
+            Configuration.rootConfig = new YamlFile("plugins/CommandBlocker/config.yml");
 
             try {
-                if (!Configuration.this.rootConfig.exists()) {
-                    Configuration.this.rootConfig.createNewFile(true);
+                if (!Configuration.rootConfig.exists()) {
+                    Configuration.rootConfig.createNewFile(true);
                 }
-                Configuration.this.rootConfig.loadWithComments();
-                Configuration.this.rootConfig.options().copyDefaults(true);
+                Configuration.rootConfig.loadWithComments();
+                Configuration.rootConfig.options().copyDefaults(true);
             } catch (final IOException | InvalidConfigurationException e) {
                 e.printStackTrace();
             }
 
-            Configuration.this.rootBlocked = new YamlFile("plugins/CommandBlocker/disabled.yml");
+            Configuration.rootBlocked = new YamlFile("plugins/CommandBlocker/disabled.yml");
 
             try {
-                if (!Configuration.this.rootBlocked.exists()) {
-                    Configuration.this.rootBlocked.createNewFile(true);
-                    Configuration.this.rootBlocked.options().copyDefaults(true);
+                if (!Configuration.rootBlocked.exists()) {
+                    Configuration.rootBlocked.createNewFile(true);
+                    Configuration.rootBlocked.options().copyDefaults(true);
                 }
-                Configuration.this.rootBlocked.loadWithComments();
+                Configuration.rootBlocked.loadWithComments();
             } catch (final IOException | InvalidConfigurationException e) {
                 e.printStackTrace();
             }
 
-            Configuration.this.rootOpBlocked = new YamlFile("plugins/CommandBlocker/opblock.yml");
+            Configuration.rootOpBlocked = new YamlFile("plugins/CommandBlocker/opblock.yml");
 
             try {
-                if (!Configuration.this.rootOpBlocked.exists()) {
-                    Configuration.this.rootOpBlocked.createNewFile(true);
-                    Configuration.this.rootOpBlocked.options().copyDefaults(true);
+                if (!Configuration.rootOpBlocked.exists()) {
+                    Configuration.rootOpBlocked.createNewFile(true);
+                    Configuration.rootOpBlocked.options().copyDefaults(true);
                 }
-                Configuration.this.rootOpBlocked.loadWithComments();
+                Configuration.rootOpBlocked.loadWithComments();
             } catch (final IOException | InvalidConfigurationException e) {
                 e.printStackTrace();
             }
 
-            Configuration.this.rootMessages = new YamlFile("plugins/CommandBlocker/messages.yml");
+            Configuration.rootMessages = new YamlFile("plugins/CommandBlocker/messages.yml");
 
             try {
-                if (!Configuration.this.rootMessages.exists()) {
-                    Configuration.this.rootMessages.createNewFile(true);
-                    Configuration.this.rootMessages.options().copyDefaults(true);
+                if (!Configuration.rootMessages.exists()) {
+                    Configuration.rootMessages.createNewFile(true);
+                    Configuration.rootMessages.options().copyDefaults(true);
                 }
-                Configuration.this.rootMessages.loadWithComments();
+                Configuration.rootMessages.loadWithComments();
             } catch (final IOException | InvalidConfigurationException e) {
                 e.printStackTrace();
             }
+
+            CommandBlocker.resetCachedLists();
         }
 
         /**
@@ -181,7 +204,7 @@ public class Configuration {
          * @return the string from the configuration file
          */
         public String getString(final String path) {
-            return Configuration.this.currentConfiguration.getString(path);
+            return Configuration.currentConfiguration.getString(path);
         }
 
         /**
@@ -191,7 +214,7 @@ public class Configuration {
          * @return the integer from the configuration file
          */
         public int getInt(final String path) {
-            return Configuration.this.currentConfiguration.getInt(path);
+            return Configuration.currentConfiguration.getInt(path);
         }
 
         /**
@@ -201,7 +224,7 @@ public class Configuration {
          * @return the boolean from the configuration file
          */
         public boolean getBoolean(final String path) {
-            return Configuration.this.currentConfiguration.getBoolean(path);
+            return Configuration.currentConfiguration.getBoolean(path);
         }
 
         /**
@@ -211,7 +234,17 @@ public class Configuration {
          * @return the string list from the configuration file
          */
         public List<String> getStringList(final String path) {
-            return Configuration.this.currentConfiguration.getStringList(path);
+            return Configuration.currentConfiguration.getStringList(path);
+        }
+
+        /**
+         * Gets the configuration section of a path.
+         *
+         * @param path the path in the configuration file
+         * @return the configuration section from the configuration file
+         */
+        public ConfigurationSection getConfigurationSection(final String path) {
+            return Configuration.currentConfiguration.getConfigurationSection(path);
         }
 
         /**
@@ -221,7 +254,7 @@ public class Configuration {
          * @return the object from the configuration file
          */
         public Object get(final String path) {
-            return Configuration.this.currentConfiguration.get(path);
+            return Configuration.currentConfiguration.get(path);
         }
 
         /**
@@ -231,7 +264,7 @@ public class Configuration {
          * @param object the object to set
          */
         public void set(final String path, final Object object) {
-            Configuration.this.currentConfiguration.set(path, object);
+            Configuration.currentConfiguration.set(path, object);
         }
 
         /**
@@ -243,7 +276,7 @@ public class Configuration {
          */
         public void set(final String path, final Object object, final String comment) {
             this.set(path, object);
-            Configuration.this.currentConfiguration.setComment(path, comment, CommentType.BLOCK);
+            Configuration.currentConfiguration.setComment(path, comment, CommentType.BLOCK);
         }
 
         /**
@@ -251,11 +284,12 @@ public class Configuration {
          */
         public void save() {
             try {
-                Configuration.this.currentConfiguration.save();
+                Configuration.currentConfiguration.save();
             } catch (final IOException e) {
                 e.printStackTrace();
             }
         }
+
     }
 
 }

@@ -16,12 +16,48 @@
  */
 package me.treyruffy.commandblocker.velocity;
 
+import com.google.inject.Inject;
 import com.velocitypowered.api.plugin.Plugin;
+import com.velocitypowered.api.proxy.ProxyServer;
+import org.slf4j.Logger;
 
 /**
  * The main CommandBlocker Velocity Plugin class.
  */
 @Plugin(id = "commandblocker", name = "CommandBlocker", version = "@project-version@", authors = {"TreyRuffy"})
 public class CommandBlockerVelocity {
+
+    private final ProxyServer server;
+    private final Logger logger;
+
+    /**
+     * Initializes the Velocity plugin.
+     *
+     * @param server ProxyServer from the injection
+     * @param logger Logger from the injection
+     */
+    @Inject
+    public CommandBlockerVelocity(final ProxyServer server, final Logger logger) {
+        this.server = server;
+        this.logger = logger;
+    }
+
+    /**
+     * Gets the Command Blocker Velocity logger.
+     *
+     * @return the logger
+     */
+    public Logger logger() {
+        return this.logger;
+    }
+
+    /**
+     * Gets the Command Blocker Velocity server.
+     *
+     * @return the proxy server
+     */
+    public ProxyServer server() {
+        return this.server;
+    }
 
 }

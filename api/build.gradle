@@ -1,9 +1,12 @@
+repositories {
+	maven { url 'https://jitpack.io' }
+}
+
 dependencies {
 	compileOnly 'org.jetbrains:annotations:22.0.0'
-	api('net.kyori:adventure-api:4.9.2') {
-		exclude(module: 'adventure-bom')
-		exclude(module: 'checker-qual')
-		exclude(module: 'annotations')
-	}
-	implementation 'com.google.code.gson:gson:2.8.8'
+	api 'net.kyori:adventure-api:4.9.3'
+	api "net.kyori:adventure-text-minimessage:4.1.0-SNAPSHOT"
+	api 'net.kyori:adventure-text-serializer-legacy:4.9.3'
+	api 'com.google.code.gson:gson:2.8.9'
+	api 'me.carleslc.Simple-YAML:Simple-Yaml:1.7.2'
 }
