@@ -33,6 +33,7 @@ import org.simpleyaml.configuration.ConfigurationSection;
 /**
  * The main Command Blocker API class.
  */
+@SuppressWarnings("DuplicatedCode")
 public final class CommandBlocker {
 
     private static List<Command> normalCommandsBlocked;
@@ -50,6 +51,75 @@ public final class CommandBlocker {
         operatorCommandsBlocked = new ArrayList<>();
         configToCache(CommandBlockerTypes.REGULAR_PLAYERS);
         configToCache(CommandBlockerTypes.OPERATORS);
+
+        final ConfigurationSection colonCommandsSection =
+            Configuration.getConfiguration(ConfigurationFiles.CONFIGURATION).getConfigurationSection("ColonedCommands");
+        if (colonCommandsSection.getBoolean("Enabled")) {
+            colonCommandsSetup(CommandBlockerTypes.REGULAR_PLAYERS);
+            if (colonCommandsSection.getBoolean("DisableForOperators")) {
+                colonCommandsSetup(CommandBlockerTypes.OPERATORS);
+            }
+        }
+    }
+
+    private static Command createConfigCommand(final ConfigurationSection configSection, final String command) {
+        final String permission = configSection.getString("Permission");
+        final List<String> message;
+        if (!configSection.getStringList("Message").isEmpty()) {
+            message = configSection.getStringList("Message");
+        } else if (configSection.getString("Message") != null && !configSection.getString("Message").equals("[]")) {
+            message = Collections.singletonList(configSection.getString("Message"));
+        } else {
+            message = null;
+        }
+        final List<String> worlds = configSection.getStringList("Worlds");
+        final List<String> playerCommands = configSection.getStringList("PlayerCommands");
+        final List<String> consoleCommands = configSection.getStringList("ConsoleCommands");
+        final boolean tabComplete;
+        if (configSection.getString("DisableTabComplete") == null) {
+            tabComplete = true;
+        } else {
+            tabComplete = configSection.getBoolean("DisableTabComplete");
+        }
+
+        final List<UUID> whitelistedPlayers = new ArrayList<>();
+        for (final String whitelistedPlayer : configSection.getStringList("WhitelistedPlayers")) {
+            whitelistedPlayers.add(UUID.fromString(whitelistedPlayer));
+        }
+
+        final String title;
+        final String subtitle;
+        final Title.Times titleTime;
+        if (configSection.isConfigurationSection("Title")) {
+            final ConfigurationSection titleSection = configSection.getConfigurationSection("Title");
+            title = titleSection.getString("Title");
+            subtitle = titleSection.getString("Subtitle");
+            final Duration fadeIn = Duration.ofSeconds(titleSection.getLong("FadeIn"));
+            final Duration stay = Duration.ofSeconds(titleSection.getLong("Stay"));
+            final Duration fadeOut = Duration.ofSeconds(titleSection.getLong("FadeOut"));
+            titleTime = Title.Times.times(fadeIn, stay, fadeOut);
+        } else {
+            title = null;
+            subtitle = null;
+            titleTime = null;
+        }
+
+        final String actionBar = configSection.getString("ActionBar");
+
+        return new Command(command.split(" "), permission, message, worlds, playerCommands,
+            consoleCommands, tabComplete, whitelistedPlayers, title, subtitle, titleTime, actionBar);
+    }
+
+    private static void colonCommandsSetup(final CommandBlockerTypes commandBlockerType) {
+        final ConfigurationSection configuration =
+            Configuration.getConfiguration(ConfigurationFiles.CONFIGURATION).getConfigurationSection("ColonedCommands");
+        final Command fullCommand = createConfigCommand(configuration, ":");
+
+        if (commandBlockerType == CommandBlockerTypes.REGULAR_PLAYERS) {
+            normalCommandsBlocked.add(fullCommand);
+        } else {
+            operatorCommandsBlocked.add(fullCommand);
+        }
     }
 
     private static void configToCache(final CommandBlockerTypes commandBlockerType) {
@@ -73,45 +143,7 @@ public final class CommandBlocker {
         for (final String command : configSection.getKeys(false)) {
             final Command fullCommand;
             if (configSection.isConfigurationSection(command)) {
-                final ConfigurationSection commandConfigSection = configSection.getConfigurationSection(command);
-                final String permission = commandConfigSection.getString("Permission");
-                final List<String> message;
-                if (!commandConfigSection.getStringList("Message").isEmpty()) {
-                    message = commandConfigSection.getStringList("Message");
-                } else if (commandConfigSection.getString("Message") != null) {
-                    message = Collections.singletonList(commandConfigSection.getString("Message"));
-                } else {
-                    message = null;
-                }
-                final List<String> worlds = commandConfigSection.getStringList("Worlds");
-                final List<String> playerCommands = commandConfigSection.getStringList("PlayerCommands");
-                final List<String> consoleCommands = commandConfigSection.getStringList("ConsoleCommands");
-                final List<UUID> whitelistedPlayers = new ArrayList<>();
-                for (final String whitelistedPlayer : commandConfigSection.getStringList("WhitelistedPlayers")) {
-                    whitelistedPlayers.add(UUID.fromString(whitelistedPlayer));
-                }
-
-                final String title;
-                final String subtitle;
-                final Title.Times titleTime;
-                if (commandConfigSection.isConfigurationSection("Title")) {
-                    final ConfigurationSection titleSection = commandConfigSection.getConfigurationSection("Title");
-                    title = titleSection.getString("Title");
-                    subtitle = titleSection.getString("Subtitle");
-                    final Duration fadeIn = Duration.ofSeconds(titleSection.getLong("FadeIn"));
-                    final Duration stay = Duration.ofSeconds(titleSection.getLong("Stay"));
-                    final Duration fadeOut = Duration.ofSeconds(titleSection.getLong("FadeOut"));
-                    titleTime = Title.Times.of(fadeIn, stay, fadeOut);
-                } else {
-                    title = null;
-                    subtitle = null;
-                    titleTime = null;
-                }
-
-                final String actionBar = commandConfigSection.getString("ActionBar");
-
-                fullCommand = new Command(command.split(" "), permission, message, worlds, playerCommands,
-                    consoleCommands, whitelistedPlayers, title, subtitle, titleTime, actionBar);
+                fullCommand = createConfigCommand(configSection.getConfigurationSection(command), command);
             } else {
                 fullCommand = new Command(command.split(" "), null, null);
             }
@@ -249,7 +281,12 @@ public final class CommandBlocker {
             .replace("%c", stringBuilder.toString().trim());
     }
 
-    private static @NotNull List<String> defaultMessage() {
+    /**
+     * Gets the default message for a command.
+     *
+     * @return the default message
+     */
+    public static @NotNull List<String> defaultMessage() {
         final Configuration.ConfigurationOptions configuration = Configuration.getConfiguration(ConfigurationFiles.CONFIGURATION);
         final List<String> defaultMessage;
         if (configuration.getStringList("Default.Message").isEmpty()) {
@@ -333,13 +370,16 @@ public final class CommandBlocker {
         final ConfigurationSection titleSection = commandConfigSection.createSection("Title");
         titleSection.set("Title", command.title());
         titleSection.set("Subtitle", command.subtitle());
-        if (command.titleTime() != null) {
-            titleSection.set("FadeIn", command.titleTime().fadeIn().getSeconds());
-            titleSection.set("Stay", command.titleTime().stay().getSeconds());
-            titleSection.set("FadeOut", command.titleTime().fadeOut().getSeconds());
+        final Title.Times titleTimes = command.titleTime();
+        if (titleTimes != null && (titleTimes.fadeIn().getSeconds() != 0 || titleTimes.stay().getSeconds() != 0
+            || titleTimes.fadeOut().getSeconds() != 0)) {
+            titleSection.set("FadeIn", titleTimes.fadeIn().getSeconds());
+            titleSection.set("Stay", titleTimes.stay().getSeconds());
+            titleSection.set("FadeOut", titleTimes.fadeOut().getSeconds());
         }
 
         commandConfigSection.set("ActionBar", command.actionBar());
+        commandConfigSection.set("DisableTabComplete", command.disableTabComplete());
         configuration.save();
     }
 

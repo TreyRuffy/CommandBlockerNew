@@ -22,7 +22,7 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import me.treyruffy.commandblocker.common.TranslateVariables;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -48,7 +48,8 @@ public class Variables implements TranslateVariables {
     public Component translateVariables(@NotNull final String message, final Object player,
                                         @Nullable final HashMap<String, String> additionalVariables,
                                         @Nullable final HashMap<String, Component> additionalComponentVariables) {
-        String messageToString = ChatColor.translateAlternateColorCodes('&', message);
+        final Component messageComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(message);
+        String messageToString = MiniMessage.miniMessage().serialize(messageComponent);
 
         if (player instanceof OfflinePlayer) {
             final OfflinePlayer offlinePlayer = (OfflinePlayer) player;
@@ -85,10 +86,10 @@ public class Variables implements TranslateVariables {
         if (additionalComponentVariables != null) {
             for (final String placeholder : additionalComponentVariables.keySet()) {
                 messageToString = messageToString.replace(placeholder,
-                MiniMessage.get().serialize(additionalComponentVariables.get(placeholder)) + "<reset>");
+                MiniMessage.miniMessage().serialize(additionalComponentVariables.get(placeholder)) + "<reset>");
             }
         }
 
-        return MiniMessage.get().parse(messageToString);
+        return MiniMessage.miniMessage().deserialize(messageToString);
     }
 }

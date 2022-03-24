@@ -14,18 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package me.treyruffy.commandblocker.common;
-
 /**
- * The different types of servers.
+ * CommandBlocker Bukkit GUI files.
  */
-public enum ServerTypes {
-
-    BUKKIT, SPIGOT, PAPER,
-    BUKKITLEGACY,
-    BUNGEECORD,
-    NUKKIT,
-    SPONGE,
-    VELOCITY
-
-}
+package me.treyruffy.commandblocker.bukkit.gui;

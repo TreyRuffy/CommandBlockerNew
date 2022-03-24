@@ -22,9 +22,12 @@ import java.util.UUID;
 import me.treyruffy.commandblocker.api.Command;
 import me.treyruffy.commandblocker.api.CommandBlocker;
 import me.treyruffy.commandblocker.api.CommandBlockerTypes;
+import me.treyruffy.commandblocker.api.config.Configuration;
+import me.treyruffy.commandblocker.api.config.ConfigurationFiles;
 import me.treyruffy.commandblocker.common.players.CommandBlockerPlayers;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.simpleyaml.configuration.ConfigurationSection;
 
 /**
  * Checks if the command should be blocked.
@@ -88,6 +91,24 @@ public class CheckBlock {
                 if (argumentMatches) {
                     this.blockedCommand = command;
                     break;
+                }
+            // Colon commands blocking from custom created Command object
+            } else if (this.commandArguments[0].contains(":") && testingCommandArguments.length == 1
+                && testingCommandArguments[0].equalsIgnoreCase(":")) {
+                final ConfigurationSection configurationSection =
+                    Configuration.getConfiguration(ConfigurationFiles.CONFIGURATION).getConfigurationSection("ColonedCommands");
+
+                if (configurationSection.getBoolean("DisableAllColonsInCommands")) {
+                    this.blockedCommand = command;
+                } else {
+                    if (!configurationSection.getStringList("DisableColonsInFollowingCommands").isEmpty()) {
+                        for (final String colonedCommand : configurationSection.getStringList("DisableColonsInFollowingCommands")) {
+                            if (this.commandArguments[0].toLowerCase().startsWith(colonedCommand.toLowerCase() + ":")) {
+                                this.blockedCommand = command;
+                                break;
+                            }
+                        }
+                    }
                 }
             }
         }

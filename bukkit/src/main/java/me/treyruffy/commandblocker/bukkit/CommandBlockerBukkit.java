@@ -16,6 +16,11 @@
  */
 package me.treyruffy.commandblocker.bukkit;
 
+import java.util.List;
+import me.treyruffy.commandblocker.api.Command;
+import me.treyruffy.commandblocker.api.CommandBlocker;
+import me.treyruffy.commandblocker.api.CommandBlockerTypes;
+import me.treyruffy.commandblocker.bukkit.gui.MainCommandGui;
 import me.treyruffy.commandblocker.common.CommandBlockerCommon;
 import me.treyruffy.commandblocker.common.CommandBlockerValues;
 import me.treyruffy.commandblocker.common.Universal;
@@ -57,6 +62,13 @@ public class CommandBlockerBukkit extends JavaPlugin {
         }
 
         Bukkit.getPluginManager().registerEvents(new CommandListener(), this);
+
+        Bukkit.getOnlinePlayers().iterator().forEachRemaining(player -> {
+            final List<Command> commands = CommandBlocker.commandsBlocked(CommandBlockerTypes.REGULAR_PLAYERS);
+            if (commands != null) {
+                new MainCommandGui().firstPageGui(commands.get(0), false, player);
+            }
+        });
     }
 
     /**

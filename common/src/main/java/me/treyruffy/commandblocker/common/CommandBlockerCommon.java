@@ -48,7 +48,7 @@ public class CommandBlockerCommon {
 
             final String[] command = new String[] {"testing123", "test2"};
             CommandBlocker.addBlockedCommand(CommandBlockerTypes.REGULAR_PLAYERS, new Command(command, null,
-                null, null, null, null, Collections.singletonList(UUID.randomUUID()),
+                null, null, null, null, true, Collections.singletonList(UUID.randomUUID()),
                 null, null, null, null));
         }
     }

@@ -67,7 +67,11 @@ public class BlockedCommandOutput {
         final List<String> commands = this.command().playerCommands();
         if (commands != null) {
             for (final String command : commands) {
-                this.player.performCommand(command);
+                this.player.performCommand(command.replace("%player%", this.player.name())
+                    .replace("%displayname%", this.player.displayName())
+                    .replace("%username%", this.player.displayName())
+                    .replace("%world%", this.player.world())
+                    .replace("%uuid%", this.player.uuidAsString()));
             }
         }
     }
@@ -80,7 +84,11 @@ public class BlockedCommandOutput {
         final List<String> commands = this.command().consoleCommands();
         if (commands != null) {
             for (final String command : commands) {
-                methods.executeConsoleCommand(command);
+                methods.executeConsoleCommand(command.replace("%player%", this.player.name())
+                    .replace("%displayname%", this.player.displayName())
+                    .replace("%username%", this.player.displayName())
+                    .replace("%world%", this.player.world())
+                    .replace("%uuid%", this.player.uuidAsString()));
             }
         }
     }

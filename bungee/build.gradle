@@ -5,8 +5,8 @@ plugins {
 
 dependencies {
 	implementation project(path: ':common', configuration: 'shadow')
-	implementation 'net.md-5:bungeecord-api:1.16-R0.4'
-	implementation('net.kyori:adventure-platform-bungeecord:4.0.0') {
+	api 'net.md-5:bungeecord-api:1.18-R0.1'
+	implementation('net.kyori:adventure-platform-bungeecord:4.0.1') {
 		exclude(module: 'adventure-bom')
 		exclude(module: 'adventure-api')
 		exclude(module: 'adventure-nbt')

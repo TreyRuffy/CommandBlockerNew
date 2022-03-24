@@ -192,6 +192,10 @@ EditGui:
     - "&r &r &r &2 %username% for the player's display name."
     - "&r &r &r &2 For alternative variables, use &nPlaceholderAPI&2."
   CannotUseCommand: "&c&l\u26A0&c You can't use a command for this!"
+  TitleItemName: "&dEdit Title Options"
+  WhitelistItemName: "&dEdit Whitelisted Players"
+  PreviousPageItemName: '&dPrevious Page'
+  NextPageItemName: '&dNext Page'
 
 EditOpGui:
   GoBackItemName: "&dGo Back"
@@ -229,6 +233,10 @@ EditOpGui:
     - "&r &r &r &2 %username% for the player's display name."
     - "&r &r &r &2 For alternative variables, use &nPlaceholderAPI&2."
   CannotUseCommand: "&c&l\u26A0&c You can't use a command for this!"
+  TitleItemName: "&dEdit Title Options"
+  WhitelistItemName: "&dEdit Whitelisted Players"
+  PreviousPageItemName: '&dPrevious Page'
+  NextPageItemName: '&dNext Page'
 
 Updates:
   UpdateFound:

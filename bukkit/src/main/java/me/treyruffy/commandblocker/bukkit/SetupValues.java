@@ -48,10 +48,15 @@ public class SetupValues implements CommandBlockerValues {
         try {
             Class.forName("com.destroystokyo.paper.PaperConfig");
             return ServerTypes.PAPER;
-        } catch (final ClassNotFoundException ignored) {
+        } catch (final ClassNotFoundException e) {
+            try {
+                Class.forName("org.spigotmc.SpigotConfig");
+                return ServerTypes.SPIGOT;
+            } catch (final ClassNotFoundException e1) {
+                return ServerTypes.BUKKIT;
+            }
             // Do nothing
         }
-        return ServerTypes.SPIGOT;
     }
 
     @Override
@@ -76,7 +81,7 @@ public class SetupValues implements CommandBlockerValues {
 
     @Override
     public void sendMessage(final Object commandSender, final Component message) {
-        if (LegacyComponentSerializer.legacy(ChatColor.COLOR_CHAR).serialize(message).equalsIgnoreCase(""))
+        if (LegacyComponentSerializer.legacySection().serialize(message).equalsIgnoreCase(""))
             return;
         if (!(commandSender instanceof CommandSender)) {
             this.log().warn(ChatColor.RED + "Tried sending message as a non command sender.");

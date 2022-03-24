@@ -43,6 +43,7 @@ public class Command {
     private @Nullable String subtitle;
     private @Nullable Title.Times titleTime;
     private @Nullable String actionBar;
+    private boolean disableTabComplete;
 
     /**
      * Instantiates a new block command.
@@ -53,16 +54,19 @@ public class Command {
      * @param worlds the worlds / servers the command is blocked in
      * @param playerCommands the player commands executed when the blocked command is executed
      * @param consoleCommands the console commands executed when the blocked command is executed
+     * @param disableTabComplete if the command should be able to be tab completed
      * @param whitelistedPlayers the whitelisted players for the command
      * @param title the title to send the player who executed the command
+     * @param subtitle the subtitle to send the player who executed the command
+     * @param titleTime the time the title should show for
      * @param actionBar the action bar to send the player who executed the command
      */
     public Command(@NotNull final String[] command, @Nullable final String permission,
                    @Nullable final List<String> messages, @Nullable final List<String> worlds,
                    @Nullable final List<String> playerCommands, @Nullable final List<String> consoleCommands,
-                   @Nullable final List<UUID> whitelistedPlayers, @Nullable final String title,
-                   @Nullable final String subtitle, @Nullable final Title.Times titleTime,
-                   @Nullable final String actionBar) {
+                   final boolean disableTabComplete, @Nullable final List<UUID> whitelistedPlayers,
+                   @Nullable final String title, @Nullable final String subtitle,
+                   @Nullable final Title.Times titleTime, @Nullable final String actionBar) {
         this.command = command;
 
         if (permission == null) {
@@ -92,6 +96,7 @@ public class Command {
 
         this.playerCommands = playerCommands;
         this.consoleCommands = consoleCommands;
+        this.disableTabComplete = disableTabComplete;
         this.whitelistedPlayers = whitelistedPlayers;
         this.title = title;
         this.subtitle = subtitle;
@@ -108,11 +113,13 @@ public class Command {
      * @param worlds the worlds / servers the command is blocked in
      * @param playerCommands the player commands executed when the blocked command is executed
      * @param consoleCommands the console commands executed when the blocked command is executed
+     * @param disableTabComplete if the command should be able to be tab completed
      */
     public Command(@NotNull final String[] command, @Nullable final String permission,
                    @Nullable final List<String> messages, @Nullable final List<String> worlds,
-                   @Nullable final List<String> playerCommands, @Nullable final List<String> consoleCommands) {
-        this(command, permission, messages, worlds, playerCommands, consoleCommands, null, null, null, null, null);
+                   @Nullable final List<String> playerCommands, @Nullable final List<String> consoleCommands,
+                   final boolean disableTabComplete) {
+        this(command, permission, messages, worlds, playerCommands, consoleCommands, disableTabComplete, null, null, null, null, null);
     }
 
     /**
@@ -124,7 +131,7 @@ public class Command {
      */
     public Command(@NotNull final String[] command, @Nullable final String permission,
                    @Nullable final List<String> messages) {
-        this(command, permission, messages, null, null, null);
+        this(command, permission, messages, null, null, null, true);
     }
 
     /**
@@ -281,6 +288,24 @@ public class Command {
     }
 
     /**
+     * Gets if the command can be tab autocompleted.
+     *
+     * @return {@code true} if the command cannot be tab autocompleted
+     */
+    public boolean disableTabComplete() {
+        return this.disableTabComplete;
+    }
+
+    /**
+     * Sets if the command can be tab autocompleted.
+     *
+     * @param disableTabComplete {@code true} if the command cannot be tab autocompleted
+     */
+    public void disableTabComplete(final boolean disableTabComplete) {
+        this.disableTabComplete = disableTabComplete;
+    }
+
+    /**
      * Gets the whitelisted players of the blocked command.
      *
      * @return the UUIDs of the whitelisted players
@@ -339,7 +364,7 @@ public class Command {
      *
      * @return the title time
      */
-    public Title.Times titleTime() {
+    public @Nullable Title.Times titleTime() {
         return this.titleTime;
     }
 

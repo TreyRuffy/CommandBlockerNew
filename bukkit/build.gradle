@@ -7,6 +7,7 @@ repositories {
 	maven {
 		url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/'
 	}
+	maven { url = "https://repo.mattstudios.me/artifactory/public/" }
 }
 
 dependencies {
@@ -18,8 +19,8 @@ dependencies {
 		exclude(module: 'adventure-nbt')
 	}
 
-	implementation('net.kyori:adventure-platform-bukkit:4.0.0')
-	implementation "io.papermc:paperlib:1.0.6"
+	implementation('net.kyori:adventure-platform-bukkit:4.1.0')
+	implementation('dev.triumphteam:triumph-gui:3.1.2')
 	compileOnly 'me.clip:placeholderapi:2.10.10'
 }
 
@@ -29,13 +30,13 @@ shadowJar {
 	dependencies {
 		include(dependency('me.treyruffy.commandblocker:.*'))
 		include(dependency('net.kyori:.*'))
-		include(dependency('io.papermc:.*'))
+		include(dependency('dev.triumphteam:.*'))
 	}
 
 	relocate 'net.kyori', 'me.treyruffy.commandblocker.libs.adventure'
-	relocate "io.papermc.lib", "me.treyruffy.commandblocker.libs.paperlib"
 	relocate 'org.simpleyaml', 'me.treyruffy.commandblocker.libs.simpleyaml'
 	relocate 'org.yaml', 'me.treyruffy.commandblocker.libs.yaml'
+	relocate 'dev.triumphteam.gui', 'me.treyruffy.commandblocker.libs.triumphteamgui'
 }
 
 artifacts {

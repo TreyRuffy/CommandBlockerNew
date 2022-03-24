@@ -26,7 +26,6 @@ import me.treyruffy.commandblocker.api.CommandBlocker;
 import org.simpleyaml.configuration.ConfigurationSection;
 import org.simpleyaml.configuration.comments.CommentType;
 import org.simpleyaml.configuration.file.YamlFile;
-import org.simpleyaml.exceptions.InvalidConfigurationException;
 
 /**
  * The configuration for CommandBlocker.
@@ -154,7 +153,7 @@ public final class Configuration {
                 }
                 Configuration.rootConfig.loadWithComments();
                 Configuration.rootConfig.options().copyDefaults(true);
-            } catch (final IOException | InvalidConfigurationException e) {
+            } catch (final IOException e) {
                 e.printStackTrace();
             }
 
@@ -166,7 +165,7 @@ public final class Configuration {
                     Configuration.rootBlocked.options().copyDefaults(true);
                 }
                 Configuration.rootBlocked.loadWithComments();
-            } catch (final IOException | InvalidConfigurationException e) {
+            } catch (final IOException e) {
                 e.printStackTrace();
             }
 
@@ -178,7 +177,7 @@ public final class Configuration {
                     Configuration.rootOpBlocked.options().copyDefaults(true);
                 }
                 Configuration.rootOpBlocked.loadWithComments();
-            } catch (final IOException | InvalidConfigurationException e) {
+            } catch (final IOException e) {
                 e.printStackTrace();
             }
 
@@ -190,7 +189,7 @@ public final class Configuration {
                     Configuration.rootMessages.options().copyDefaults(true);
                 }
                 Configuration.rootMessages.loadWithComments();
-            } catch (final IOException | InvalidConfigurationException e) {
+            } catch (final IOException e) {
                 e.printStackTrace();
             }
 
@@ -276,6 +275,16 @@ public final class Configuration {
          */
         public void set(final String path, final Object object, final String comment) {
             this.set(path, object);
+            this.setComment(path, comment);
+        }
+
+        /**
+         * Sets a comment on an existing item in the configuration file.
+         *
+         * @param path the path in the configuration file
+         * @param comment the comment to add
+         */
+        public void setComment(final String path, final String comment) {
             Configuration.currentConfiguration.setComment(path, comment, CommentType.BLOCK);
         }
 
