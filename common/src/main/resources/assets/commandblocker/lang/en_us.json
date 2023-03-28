@@ -1,0 +1,9 @@
+{
+  "commands.reload.description": "Reloads Command Blocker.",
+  "commands.reload.usage": "/%s reload",
+  "commands.reload.start": "Reloading...",
+  "commands.reload.success": "<green><checkmark>Reloaded successfully!</green>",
+  "commands.reload.success.tooltip": "<gray>Added </gray><white>%s</white><gray> commands!</gray>",
+  "commands.reload.failure": "<red>Reload failed; keeping the old data.</red>",
+  "commands.reload.failure.tooltip": "<gray>Exception: </gray><white>%s</white>"
+}

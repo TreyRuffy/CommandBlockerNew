@@ -1,12 +1,17 @@
-repositories {
-	maven { url 'https://jitpack.io' }
-}
+apply plugin: "com.github.johnrengelman.shadow"
 
 dependencies {
-	compileOnly 'org.jetbrains:annotations:23.0.0'
-	api 'net.kyori:adventure-api:4.10.1'
-	api "net.kyori:adventure-text-minimessage:4.10.1"
-	api 'net.kyori:adventure-text-serializer-legacy:4.10.1'
-	api 'com.google.code.gson:gson:2.9.0'
-	api 'me.carleslc.Simple-YAML:Simple-Yaml:1.8'
+  api(libs.bundles.adventure) {
+    exclude(module: 'checker-qual')
+    exclude(module: 'guava')
+    exclude(module: 'annotations')
+    exclude(module: 'adventure-bom')
+  }
+  api(libs.event.api) {
+    exclude(module: 'checker-qual')
+    exclude(module: 'guava')
+  }
+  api(libs.configurate.core) {
+    transitive = false
+  }
 }

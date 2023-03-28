@@ -1,0 +1,14 @@
+name: CommandBlockerLegacy
+main: me.treyruffy.commandblocker.bukkitlegacy.CommandBlockerBukkitLegacy
+version: ${pluginVersion}
+api-version: 1.13
+description: CommandBlocker for Legacy Bukkit-based versions
+author: TreyRuffy
+softdepend:
+  - PlaceholderAPI
+prefix: Command Blocker Legacy
+website: https://github.com/TreyRuffy/CommandBlocker
+commands:
+  commandblocker:
+    description: CommandBlocker commands
+    aliases: [cb, commandblockerbukkit, cbbukkit]

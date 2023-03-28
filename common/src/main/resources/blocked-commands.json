@@ -1,0 +1,100 @@
+{
+  "$schema": "./blocked-commands.schema.json",
+  "blockedCommands": [
+    {
+      "args": ["test-command"],
+      "disabled": true,
+      "messages": [
+        "<red>You do not have permission to execute this command, <player_name>."
+      ],
+      "permission": "commandblocker.allow.test-command",
+      "whitelistedPlayers": [
+        "49059600-26d6-45ac-8b43-86a14f7d96ac"
+      ],
+      "disableTabCompletion": true,
+      "worlds": [
+        "world",
+        "world_the_nether"
+      ],
+      "playerCommands": [
+        "say I can't execute this command."
+      ],
+      "consoleCommands": [
+        "msg %player% You can't execute this command."
+      ],
+      "title": {
+        "title": "<red>Invalid Command",
+        "subtitle": "<gray>You cannot execute /<command>",
+        "times": {
+          "fadeIn": 15,
+          "stay": 100,
+          "fadeOut": 15
+        }
+      },
+      "actionBar": "<rainbow>Rainbow action bar"
+    },
+    {
+      "regex": "^((bukkit:)?(pl(ugins)?))\\s*.*$",
+      "messages": [
+        "<white>Plugins (0):"
+      ],
+      "permission": "cb.allow.plugins"
+    },
+    {
+      "regex": "^((bukkit:|minecraft:)?(\\?|help))\\s*.*$",
+      "messages": [
+        "<red>No help can be provided at this time."
+      ],
+      "permission": "cb.allow.help"
+    },
+    {
+      "regex": "^((bukkit:)?(ver(sion)?|about)|icanhasbukkit)\\s*.*$",
+      "messages": [
+        "<red>You are unable to view this at this time."
+      ],
+      "permission": "cb.allow.version"
+    },
+    {
+      "regex": "^((minecraft:)?(me))\\s*.*$",
+      "messages": [
+        "<red>You are unable to execute this at this time."
+      ],
+      "permission": "cb.allow.me"
+    },
+    {
+      "regex": "^((bukkit:)?(rl|reload))\\s*.*$",
+      "messages": [
+        "<red>You are unable to execute this at this time."
+      ],
+      "permission": "cb.allow.reload"
+    },
+    {
+      "args": ["restart"],
+      "messages": [
+        "<red>You are unable to execute this at this time."
+      ],
+      "permission": "cb.allow.restart"
+    },
+    {
+      "args": ["stop"],
+      "messages": [
+        "<red>You are unable to execute this at this time."
+      ],
+      "permission": "cb.allow.stop"
+    },
+    {
+      "regex": "^((bukkit:)?(op))\\s*.*$",
+      "messages": [
+        "<red>You are unable to execute this at this time."
+      ],
+      "permission": "cb.allow.op"
+    },
+    {
+      "regex": "^((bukkit:)?(deop))\\s*.*$",
+      "messages": [
+        "<red>You are unable to execute this at this time."
+      ],
+      "permission": "cb.allow.deop"
+    }
+  ]
+}

@@ -1,26 +1,49 @@
-plugins {
-	id 'com.github.johnrengelman.shadow' version '7.0.0'
-	id 'java'
+apply plugin: "com.github.johnrengelman.shadow"
+
+repositories {
+  maven {
+    url = "https://repo.extendedclip.com/content/repositories/placeholderapi/"
+  }
+  maven { url = "https://repo.mattstudios.me/artifactory/public/" }
 }
 
 dependencies {
-	implementation project(path: ':bukkit', configuration: 'shadow')
-	implementation 'com.google.code.gson:gson:2.9.0'
+  api projects.common
+  api libs.adventure.platform.bukkit
+  compileOnly libs.paper.legacy.api
+  implementation libs.brigadier
+  implementation libs.triumph.gui
+  compileOnly libs.placeholderapi
+  implementation libs.gson
 }
 
 shadowJar {
-	archiveFileName = "CommandBlocker-BukkitLegacy-${project.ext.FULL_VERSION}.jar"
+  archiveFileName = "${rootProject.archives_base_name}-BukkitLegacy-${project.ext.FULL_VERSION}.jar"
 
-	dependencies {
-		include(dependency('com.google.code.gson:gson:.*'))
-		include(dependency('me.treyruffy.commandblocker:.*'))
-		include(dependency('net.kyori:.*'))
-	}
+  dependencies {
+    include(dependency("me.treyruffy.commandblocker:.*"))
+    include(dependency("com.mojang:brigadier.*"))
+    include(dependency("dev.triumphteam:.*"))
+    include(dependency("net.kyori:.*"))
+    include(dependency("org.spongepowered:.*"))
+    include(dependency("io.leangen.geantyref:.*"))
+    include(dependency("com.google.code.gson:.*"))
+  }
 
-	relocate 'com.google.gson', 'me.treyruffy.commandblocker.libs.gson'
-	relocate 'net.kyori', 'me.treyruffy.commandblocker.libs.adventure'
+  relocate "net.kyori", "me.treyruffy.commandblocker.libs.kyori"
+  relocate "dev.triumphteam.gui", "me.treyruffy.commandblocker.libs.triumphteamgui"
+  relocate "org.spongepowered.configurate", "me.treyruffy.commandblocker.libs.spongepowered"
+  relocate "io.leangen.geantyref", "me.treyruffy.commandblocker.libs.geantyref"
+  relocate "com.mojang.brigadier", "me.treyruffy.commandblocker.libs.brigadier"
+  relocate "com.google.gson", "me.treyruffy.commandblocker.libs.gson"
 }
 
 artifacts {
-	archives shadowJar
+  archives shadowJar
+}
+
+processResources {
+  filesMatching("plugin.yml") {
+    expand "pluginVersion": project.ext.FULL_VERSION
+  }
 }

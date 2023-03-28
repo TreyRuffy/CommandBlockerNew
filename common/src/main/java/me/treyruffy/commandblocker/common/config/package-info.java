@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2021 TreyRuffy
+ * Copyright (C) 2015-2023 TreyRuffy
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +15,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 /**
- * Universal configuration files.
+ * Common configuration files.
  */
 package me.treyruffy.commandblocker.common.config;

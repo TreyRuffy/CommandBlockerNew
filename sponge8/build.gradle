@@ -1,0 +1,67 @@
+import org.spongepowered.gradle.plugin.config.PluginLoaders
+import org.spongepowered.plugin.metadata.model.PluginDependency
+
+plugins {
+  alias libs.plugins.blossom
+  alias libs.plugins.sponge.gradle
+}
+
+apply plugin: "com.github.johnrengelman.shadow"
+
+repositories {
+  maven { url "https://repo.spongepowered.org/maven" }
+}
+
+dependencies {
+  api projects.common
+  api libs.adventure.minimessage
+  compileOnly libs.brigadier
+}
+
+shadowJar {
+  archiveFileName = "${rootProject.archives_base_name}-Sponge-${project.ext.FULL_VERSION}.jar"
+
+  dependencies {
+    include(dependency("me.treyruffy.commandblocker:.*"))
+    include(dependency("net.kyori:event.*"))
+    include(dependency("net.kyori:adventure-text-minimessage.*"))
+  }
+
+  relocate "net.kyori.event", "me.treyruffy.commandblocker.libs.event"
+  relocate "net.kyori.adventure.text.minimessage", "me.treyruffy.commandblocker.libs.minimessage"
+}
+
+artifacts {
+  archives shadowJar
+}
+
+blossom {
+  replaceToken("@project-version@", project.ext.FULL_VERSION)
+}
+
+sponge {
+  apiVersion("8.0.0")
+  license("LGPL-3.0-or-later")
+  loader {
+    name(PluginLoaders.JAVA_PLAIN)
+    version("1.0")
+  }
+  plugin("commandblocker") {
+    displayName("CommandBlocker")
+    version(project.ext.FULL_VERSION)
+    entrypoint("me.treyruffy.commandblocker.sponge.CommandBlockerSponge")
+    description("Command Blocker for Sponge")
+    links {
+      homepage("https://github.com/TreyRuffy/CommandBlocker")
+      source("https://github.com/TreyRuffy/CommandBlocker.git")
+      issues("https://github.com/TreyRuffy/CommandBlocker/issues")
+    }
+    contributor("TreyRuffy") {
+      description("Lead Developer")
+    }
+    dependency("spongeapi") {
+      loadOrder(PluginDependency.LoadOrder.AFTER)
+      optional(false)
+    }
+  }
+}

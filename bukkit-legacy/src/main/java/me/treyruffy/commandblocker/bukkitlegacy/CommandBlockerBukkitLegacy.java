@@ -1,24 +1,103 @@
 /*
- * Copyright (C) 2015-2021 TreyRuffy
+ * This file is part of Command Blocker for Minecraft.
+ * Copyright (C) 2023 TreyRuffy
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
+ * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 package me.treyruffy.commandblocker.bukkitlegacy;
 
-/**
- * The main Bukkit legacy class for Command Blocker.
- */
-public class CommandBlockerBukkitLegacy {
+import java.util.Objects;
+import me.treyruffy.commandblocker.api.event.CommandBlockerEvent;
+import me.treyruffy.commandblocker.bukkitlegacy.listeners.CommandListener;
+import me.treyruffy.commandblocker.bukkitlegacy.listeners.TabCompleteListener;
+import me.treyruffy.commandblocker.bukkitlegacy.util.BukkitEventManager;
+import me.treyruffy.commandblocker.bukkitlegacy.util.SetupValues;
+import me.treyruffy.commandblocker.common.CommandBlockerCommon;
+import me.treyruffy.commandblocker.common.util.CommandBlockerValues;
+import me.treyruffy.commandblocker.common.util.Universal;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import org.bukkit.Bukkit;
+import org.bukkit.command.PluginCommand;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
+/**
+ * The main CommandBlocker Bukkit Legacy Plugin class.
+ */
+public class CommandBlockerBukkitLegacy extends JavaPlugin {
+
+  private static CommandBlockerBukkitLegacy instance;
+  private static CommandBlockerValues<?> commandBlockerValues;
+  private static BukkitAudiences adventure;
+  private boolean placeholderApiEnabled = false;
+
+  /**
+   * Gets the Bukkit Legacy plugin class.
+   *
+   * @return the CommandBlocker Bukkit Legacy plugin class
+   */
+  public static CommandBlockerBukkitLegacy get() {
+    return instance;
+  }
+
+  @Override
+  public void onEnable() {
+    instance = this;
+    adventure = BukkitAudiences.create(this);
+    Universal.get().setup(new SetupValues());
+    commandBlockerValues = Universal.get().universalMethods();
+
+    final PluginCommand command = getCommand("commandblocker");
+    Objects.requireNonNull(command).setExecutor(new BukkitLegacyCommandHandler());
+
+    if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+      this.placeholderApiEnabled = true;
+    }
+
+    Bukkit.getPluginManager().registerEvents(new CommandListener(), this);
+    Bukkit.getPluginManager().registerEvents(new TabCompleteListener(), this);
+    Universal.get().eventBus().subscribe(CommandBlockerEvent.class, new BukkitEventManager<>());
+    commandBlockerValues.log().info("Loaded correctly");
+    new CommandBlockerCommon().test();
+  }
+
+  /**
+   * Gets the Bukkit Legacy Adventure API.
+   *
+   * @return the Bukkit Legacy Adventure API
+   */
+  public static @NotNull BukkitAudiences adventure() {
+    if (adventure == null)
+      throw new IllegalStateException("Tried to access Adventure while the plugin was disabled.");
+    return adventure;
+  }
+
+  /**
+   * Checks if PlaceholderAPI is enabled.
+   *
+   * @return true if PlaceholderAPI is enabled
+   */
+  public boolean placeholderApiEnabled() {
+    return this.placeholderApiEnabled;
+  }
+
+  @Override
+  public void onDisable() {
+    if (adventure != null) {
+      adventure.close();
+      adventure = null;
+    }
+    commandBlockerValues.log().info("Unloaded correctly");
+  }
 }

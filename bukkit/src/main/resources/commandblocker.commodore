@@ -1,0 +1,82 @@
+commandblocker {
+    reload;
+    add {
+        commandType brigadier:string single_word {
+            command brigadier:string greedy_phrase;
+        }
+    }
+    edit {
+        command brigadier:string quotable_phrase {
+            message {
+                message brigadier:string greedy_phrase;
+            }
+            permission {
+                permission brigadier:string single_word;
+            }
+            whitelist {
+                add {
+                    player brigadier:string single_word;
+                }
+                remove {
+                    player brigadier:string single_word;
+                }
+            }
+            tabCompletion {
+                enabled brigadier:bool;
+            }
+            world {
+                add {
+                    world brigadier:string single_word;
+                }
+                remove {
+                    world brigadier:string single_word;
+                }
+                addAll;
+            }
+            playerCommand {
+                add {
+                    command brigadier:string greedy_phrase;
+                }
+                remove {
+                    command brigadier:string greedy_phrase;
+                }
+            }
+            consoleCommand {
+                add {
+                    command brigadier:string greedy_phrase;
+                }
+                remove {
+                    command brigadier:string greedy_phrase;
+                }
+            }
+            title {
+                title {
+                    title brigadier:string greedy_phrase;
+                }
+                subtitle {
+                    subtitle brigadier:string greedy_phrase;
+                }
+                times {
+                    fadeIn {
+                        fadeIn brigadier:integer;
+                    }
+                    stay {
+                        stay brigadier:integer;
+                    }
+                    fadeOut {
+                        fadeOut brigadier:integer;
+                    }
+                }
+            }
+            actionbar {
+                actionbar brigadier:string greedy_phrase;
+            }
+            enabled {
+                enabled brigadier:bool;
+            }
+        }
+    }
+    remove {
+        command brigadier:string greedy_phrase;
+    }
+}

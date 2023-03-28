@@ -1,0 +1,16 @@
+{
+  "$schema": "commandblocker.schema.json",
+  "default": {
+    "permission": "commandblocker.allow.%command%",
+    "messages": [
+      "<red>You do not have permission to execute this command."
+    ]
+  },
+  "commands": {
+    "forward": false
+  },
+  "updates": {
+    "check": true,
+    "announceUpdates": true
+  }
+}

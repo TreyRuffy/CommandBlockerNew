@@ -1,0 +1,50 @@
+plugins {
+  alias libs.plugins.blossom
+}
+
+apply plugin: "com.github.johnrengelman.shadow"
+
+repositories {
+  maven { url "https://repo.spongepowered.org/maven" }
+}
+
+dependencies {
+  api projects.common
+  compileOnly libs.sponge.api.'7'
+  annotationProcessor libs.sponge.api.'7'
+  api(libs.adventure.platform.sponge7) {
+    exclude(module: 'checker-qual')
+    exclude(module: 'guava')
+    exclude(module: 'annotations')
+  }
+  api libs.adventure.minimessage
+  api libs.adventure.text.serializer.legacy
+  implementation libs.brigadier
+}
+
+shadowJar {
+  archiveFileName = "${rootProject.archives_base_name}-Sponge7-${project.ext.FULL_VERSION}.jar"
+
+  dependencies {
+    include(dependency("me.treyruffy.commandblocker:.*"))
+    include(dependency("net.kyori:.*"))
+    include(dependency("org.spongepowered:.*"))
+    include(dependency("io.leangen.geantyref:.*"))
+    include(dependency("com.mojang:brigadier.*"))
+  }
+
+  relocate "net.kyori", "me.treyruffy.commandblocker.libs.kyori"
+  relocate "org.spongepowered.configurate", "me.treyruffy.commandblocker.libs.spongepowered"
+  relocate "io.leangen.geantyref", "me.treyruffy.commandblocker.libs.geantyref"
+  relocate "com.mojang.brigadier", "me.treyruffy.commandblocker.libs.brigadier"
+
+  exclude "**/META-INF/versions/**"
+}
+
+artifacts {
+  archives shadowJar
+}
+
+blossom {
+  replaceToken("@project-version@", project.ext.FULL_VERSION)
+}

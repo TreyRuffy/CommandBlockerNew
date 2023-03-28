@@ -1,0 +1,106 @@
+[versions]
+adventure = "4.13.0"
+  # https://docs.adventure.kyori.net/version-history/adventure.html
+adventure-platform = "4.3.0"
+  # https://docs.adventure.kyori.net/version-history/adventure-platform.html
+annotations = "24.0.1"
+  # https://github.com/JetBrains/java-annotations/releases
+brigadier = "1.0.18"
+  # https://github.com/Mojang/brigadier/releases
+bungeecord = "1.19-R0.1-SNAPSHOT"
+  # https://ci.md-5.net/job/BungeeCord/ws/api/target/apidocs/index.html
+blossom = "1.3.1"
+  # https://github.com/KyoriPowered/blossom/releases
+checkerframework = "0.6.25"
+  # https://github.com/kelloggm/checkerframework-gradle-plugin
+commodore = "2.2"
+  # https://github.com/lucko/commodore
+configurate = "4.1.2"
+  # https://github.com/SpongePowered/Configurate/releases
+event-api = "5.0.0-SNAPSHOT"
+  # https://github.com/KyoriPowered/event
+gson = "2.8.0" # Leave outdated
+  # https://github.com/google/gson/releases
+indra = "3.0.1"
+  # https://github.com/KyoriPowered/indra/releases
+junit = "5.9.2"
+  # https://junit.org/junit5/docs/current/release-notes/index.html#release-notes
+nukkit = "1.0-SNAPSHOT"
+  # https://ci.opencollab.dev/job/NukkitX/job/Nukkit/job/master/
+paper-api = "1.13.2-R0.1-SNAPSHOT" # Leave outdated
+  # https://jd.papermc.io/paper/
+paper-legacy-api = "1.9.4-R0.1-SNAPSHOT" # Leave outdated
+  # https://jd.papermc.io/paper/
+placeholderapi = "2.11.3"
+  # https://github.com/PlaceholderAPI/PlaceholderAPI/releases
+shadow = "7.1.2"
+  # https://github.com/johnrengelman/shadow/releases
+sponge-gradle = "2.1.1"
+  # https://github.com/SpongePowered/SpongeGradle/releases
+sponge-api-7 = "7.2.0"
+  # https://github.com/SpongePowered/Sponge/tree/stable-7
+triumph-gui = "3.1.3"
+  # https://github.com/TriumphTeam/triumph-gui/releases
+velocity = "3.2.0-SNAPSHOT"
+  # https://docs.papermc.io/velocity/dev/creating-your-first-plugin#maven-repository
+
+
+[libraries]
+# API
+adventure-api = { module = "net.kyori:adventure-api", version.ref = "adventure" }
+adventure-minimessage = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure" }
+adventure-text-serializer-plain = { module = "net.kyori:adventure-text-serializer-plain", version.ref = "adventure" }
+configurate-core = { module = "org.spongepowered:configurate-core", version.ref = "configurate" }
+event-api = { module = "net.kyori:event-api", version.ref = "event-api" }
+
+# Bukkit
+adventure-platform-bukkit = { module = "net.kyori:adventure-platform-bukkit", version.ref = "adventure-platform" }
+commodore = { module = "me.lucko:commodore", version.ref = "commodore" }
+triumph-gui = { module = "dev.triumphteam:triumph-gui", version.ref = "triumph-gui" }
+placeholderapi = { module = "me.clip:placeholderapi", version.ref = "placeholderapi" }
+paper-api = { module = "com.destroystokyo.paper:paper-api", version.ref = "paper-api" }
+
+# BungeeCord
+adventure-platform-bungeecord = { module = "net.kyori:adventure-platform-bungeecord", version.ref = "adventure-platform" }
+bungeecord = { module = "net.md-5:bungeecord-api", version.ref = "bungeecord" }
+
+# Bukkit Legacy
+paper-legacy-api = { module = "com.destroystokyo.paper:paper-api", version.ref = "paper-legacy-api" }
+
+# Common
+brigadier = { module = "com.mojang:brigadier", version.ref = "brigadier" }
+configurate-gson = { module = "org.spongepowered:configurate-gson", version.ref = "configurate" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+
+# Nukkit
+adventure-text-serializer-legacy = { module = "net.kyori:adventure-text-serializer-legacy", version.ref = "adventure" }
+nukkit = { module = "cn.nukkit:nukkit", version.ref = "nukkit" }
+
+# Sponge 7
+adventure-platform-sponge7 = { module = "net.kyori:adventure-platform-spongeapi", version.ref = "adventure-platform" }
+sponge-api-7 = { module = "org.spongepowered:spongeapi", version.ref = "sponge-api-7" }
+
+# Velocity
+velocity-api = { module = "com.velocitypowered:velocity-api", version.ref = "velocity" }
+
+# Root
+annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
+junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
+junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
+
+
+[plugins]
+blossom = { id = "net.kyori.blossom", version.ref = "blossom" }
+checkerframework = { id = "org.checkerframework", version.ref = "checkerframework"}
+indra = { id = "net.kyori.indra", version.ref = "indra" }
+indra-checkstyle = { id = "net.kyori.indra.checkstyle", version.ref = "indra" }
+indra-git = { id = "net.kyori.indra.git", version.ref = "indra" }
+indra-publishing = { id = "net.kyori.indra.publishing", version.ref = "indra" }
+indra-spotless = { id = "net.kyori.indra.licenser.spotless", version.ref = "indra" }
+shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }
+sponge-gradle = { id = "org.spongepowered.gradle.plugin", version.ref = "sponge-gradle" }
+
+
+[bundles]
+adventure = [ "adventure-api", "adventure-minimessage", "adventure-text-serializer-plain" ]
+junit = [ "junit-api", "junit-engine" ]

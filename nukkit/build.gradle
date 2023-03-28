@@ -1,36 +1,41 @@
-plugins {
-	id 'com.github.johnrengelman.shadow' version '7.0.0'
-}
+apply plugin: "com.github.johnrengelman.shadow"
 
 repositories {
-	mavenLocal()
-	maven { url 'https://repo.nukkitx.com/main/' }
+  maven { url "https://repo.opencollab.dev/maven-snapshots" }
+  maven { url "https://repo.opencollab.dev/maven-releases" }
 }
 
 dependencies {
-	implementation project(path: ':common', configuration: 'shadow')
-
-	compileOnly 'cn.nukkit:nukkit:1.0-SNAPSHOT'
+  api projects.common
+  api libs.adventure.text.serializer.legacy
+  compileOnly libs.nukkit
+  implementation libs.brigadier
 }
 
 shadowJar {
-	archiveFileName = "CommandBlocker-Nukkit-${project.ext.FULL_VERSION}.jar"
+  archiveFileName = "${rootProject.archives_base_name}-Nukkit-${project.ext.FULL_VERSION}.jar"
 
-	dependencies {
-		include(dependency('me.treyruffy.commandblocker:.*'))
-	}
+  dependencies {
+    include(dependency("me.treyruffy.commandblocker:.*"))
+    include(dependency("dev.triumphteam:.*"))
+    include(dependency("net.kyori:.*"))
+    include(dependency("org.spongepowered:.*"))
+    include(dependency("io.leangen.geantyref:.*"))
+    include(dependency("com.mojang:brigadier.*"))
+  }
 
-	relocate 'net.kyori', 'me.treyruffy.commandblocker.libs.adventure'
-	relocate 'org.simpleyaml', 'me.treyruffy.commandblocker.libs.simpleyaml'
-	relocate 'org.yaml', 'me.treyruffy.commandblocker.libs.yaml'
+  relocate "net.kyori", "me.treyruffy.commandblocker.libs.kyori"
+  relocate "org.spongepowered.configurate", "me.treyruffy.commandblocker.libs.spongepowered"
+  relocate "io.leangen.geantyref", "me.treyruffy.commandblocker.libs.geantyref"
+  relocate "com.mojang.brigadier", "me.treyruffy.commandblocker.libs.brigadier"
 }
 
 artifacts {
-	archives shadowJar
+  archives shadowJar
 }
 
 processResources {
-	filesMatching('plugin.yml') {
-		expand 'pluginVersion': project.ext.FULL_VERSION
-	}
+  filesMatching("plugin.yml") {
+    expand "pluginVersion": project.ext.FULL_VERSION
+  }
 }

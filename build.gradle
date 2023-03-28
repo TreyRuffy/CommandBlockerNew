@@ -1,62 +1,104 @@
+import java.text.SimpleDateFormat
+
 plugins {
-    id 'java'
-    id 'net.kyori.indra' version '2.1.1'
-    id 'net.kyori.indra.checkstyle' version '2.1.1'
-    id 'net.kyori.indra.git' version '2.1.1'
-    id 'net.kyori.indra.license-header' version '2.1.1'
+  id "java-library"
+  alias libs.plugins.checkerframework
+  alias libs.plugins.indra
+  alias libs.plugins.indra.checkstyle
+  alias libs.plugins.indra.git
+  alias libs.plugins.indra.publishing
+  alias libs.plugins.indra.spotless
+  alias libs.plugins.shadow apply false
 }
 
 allprojects {
-    apply plugin: 'java'
-    apply plugin: 'maven-publish'
-    apply plugin: 'net.kyori.indra'
-    apply plugin: 'net.kyori.indra.checkstyle'
-    apply plugin: 'net.kyori.indra.git'
-    apply plugin: 'net.kyori.indra.license-header'
+  apply plugin: "java-library"
+  apply plugin: "net.kyori.indra"
+  apply plugin: "net.kyori.indra.checkstyle"
+  apply plugin: "net.kyori.indra.git"
+  apply plugin: "net.kyori.indra.publishing"
+  apply plugin: "net.kyori.indra.licenser.spotless"
+  apply plugin: "org.checkerframework"
 
-    group 'me.treyruffy.commandblocker'
-    version '0.0.1-SNAPSHOT'
+  group "${rootProject.maven_group}"
+  version "${rootProject.mod_version}"
 
-    test {
-        useJUnitPlatform {
-            excludeTags 'dependency_checksum'
-        }
+  test {
+    useJUnitPlatform {
+      excludeTags "dependency_checksum"
+    }
+  }
+
+  repositories {
+    maven {
+      name "papermc"
+      url "https://papermc.io/repo/repository/maven-public/"
+    }
+    maven { url "https://jitpack.io" }
+    maven {
+      url "https://libraries.minecraft.net"
+    }
+    sonatype.ossSnapshots()
+    mavenCentral()
+  }
+
+  dependencies {
+    testImplementation libs.bundles.junit
+    compileOnly libs.annotations
+    annotationProcessor libs.annotations
+  }
+
+  indra {
+    github("TreyRuffy", "CommandBlocker")
+    lgpl3OrLaterLicense()
+
+    javaVersions {
+      target(8)
+      minimumToolchain(16)
+      testWith(8, 11, 17, 18)
     }
 
-    repositories {
-        mavenCentral()
-        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
-        maven {
-            name "papermc"
-            url "https://papermc.io/repo/repository/maven-public/"
-        }
-        //mavenLocal()
+    checkstyle("10.6.0")
+    // https://checkstyle.sourceforge.io/releasenotes.html
+  }
+
+  indraSpotlessLicenser {
+    java {
+      property("name", "TreyRuffy")
+      property("year", "2023")
     }
+  }
 
-    dependencies {
-        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
-        testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
-        api 'org.jetbrains:annotations:23.0.0'
+  compileJava {
+    options.compilerArgs +=	"-Xlint:-processing" // Fixes "no processor claimed any of these annotations" warning
+  }
 
+  project.ext {
+    GIT_COMMIT = !indraGit.isPresent() ? "unknown" : indraGit.commit().abbreviate(7).name()
+    FULL_VERSION = "${rootProject.version}".toString().replace("-SNAPSHOT", "-dev-${GIT_COMMIT}")
+
+    releaseChangelog = {
+      def dateFormat = new SimpleDateFormat("yyyy-MM-dd")
+      dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"))
+      def date = dateFormat.format(new Date())
+      def changelogFormatText = file("../docs/changelogs/format.md").text.trim()
+      def changelogText = file("../docs/changelogs/${rootProject.version}.md").text.trim()
+      def lastVersion = changelogText.split("\n")[0].split("=")[1].trim()
+      def changelog = changelogFormatText
+        .replace("%date%", date)
+        .replace("%changelog%", changelogText)
+        .replace("%version%", rootProject.version.toString())
+        .replace("%last_version%", lastVersion)
+        .replace("%github_url%", rootProject.github_url.toString())
+
+      StringBuilder changelogBuilder = new StringBuilder()
+      for (String line : changelog.split("\n")) {
+        if (!line.startsWith("!"))
+          changelogBuilder.append(line).append("\n")
+      }
+      if (!rootProject.buildDir.exists()) rootProject.buildDir.mkdirs()
+      new File(rootProject.buildDir, "CHANGELOG.md").text = changelogBuilder.toString().trim()
+      return changelogBuilder.toString().trim()
     }
-
-    tasks.withType(JavaCompile) {
-        options.encoding = 'UTF-8'
-    }
-
-    indra {
-        github("TreyRuffy", "CommandBlocker")
-        gpl3OnlyLicense()
-
-        javaVersions {
-            target(8)
-            minimumToolchain(16)
-        }
-    }
-
-    project.ext {
-        //GIT_COMMIT = !indraGit.isPresent() ? "unknown" : indraGit.commit().abbreviate(7).name()
-        FULL_VERSION = "${version}".toString() //.replace("-SNAPSHOT", "-dev-${GIT_COMMIT}")
-    }
-
+  }
 }

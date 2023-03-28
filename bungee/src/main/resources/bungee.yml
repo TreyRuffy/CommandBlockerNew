@@ -1,3 +1,5 @@
 name: CommandBlocker
 main: me.treyruffy.commandblocker.bungee.CommandBlockerBungee
 version: ${pluginVersion}
+author: TreyRuffy
+description: Blocking commands...

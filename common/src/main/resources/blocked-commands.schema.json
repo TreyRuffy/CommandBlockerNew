@@ -1,0 +1,159 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://github.com/TreyRuffy/CommandBlocker/common/src/main/resources/blocked-commands.schema.json",
+  "title": "Command Blocker blocked commands schema",
+  "description": "JSON Schema for Command Blocker blocked commands",
+  "type": "object",
+  "additionalProperties": true,
+  "$defs": {
+    "blocked-command-options": {
+      "type": "object",
+      "oneOf": [
+        {
+          "required": [
+            "args"
+          ]
+        },
+        {
+          "required": [
+            "regex"
+          ]
+        }
+      ],
+      "properties": {
+        "args": {
+          "description": "The command arguments to be blocked.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "regex": {
+          "description": "The command regex to be blocked.",
+          "type": "string"
+        },
+        "disabled": {
+          "description": "Disables the blocked command.",
+          "type": "boolean"
+        },
+        "permission": {
+          "description": "The permission required to execute the command without being blocked.",
+          "type": "string",
+          "examples": ["commandblocker.allow.help", "commandblocker.help"]
+        },
+        "messages": {
+          "description": "The message(s) sent to the player when the command is blocked.",
+          "type": ["string", "array"],
+          "items": {
+            "type": "string"
+          }
+        },
+        "worlds": {
+          "description": "The worlds (or servers if on a proxy) that the command is blocked in.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "examples": ["world", "world_the_end", "*"]
+        },
+        "playerCommands": {
+          "description": "The commands that are executed by the player when the command is blocked.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "examples": ["help"]
+        },
+        "consoleCommands": {
+          "description": "The commands that are executed by the console when the command is blocked.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "examples": ["say %p tried to access a blocked command"]
+        },
+        "title": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "title": {
+              "description": "The main title sent to the player when the command is blocked.",
+              "type": "string"
+            },
+            "subtitle": {
+              "description": "The subtitle sent to the player when the command is blocked.",
+              "type": "string"
+            },
+            "times": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "fadeIn": {
+                  "description": "The fade in time for the title sent to the player when the command is blocked.",
+                  "type": "integer"
+                },
+                "stay": {
+                  "description": "The stay time for the title sent to the player when the command is blocked.",
+                  "type": "integer"
+                },
+                "fadeOut": {
+                  "description": "The fade out time for the title sent to the player when the command is blocked.",
+                  "type":"integer"
+                }
+              }
+            }
+          }
+        },
+        "actionBar": {
+          "description": "The action bar sent to the player when the command is blocked.",
+          "type": "string"
+        },
+        "disableTabCompletion": {
+          "description": "Disables all tab completion for the command, if supported.",
+          "type": "boolean"
+        },
+        "whitelistedPlayers": {
+          "description": "Commands allowed for specified UUIDs, instead of allowing by permission.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "examples": [
+            "49059600-26d6-45ac-8b43-86a14f7d96ac"
+          ]
+        }
+      }
+    }
+  },
+  "oneOf": [
+    {
+      "required": [
+        "blockedCommands"
+      ]
+    },
+    {
+      "required": [
+        "blockedOperatorCommands"
+      ]
+    }
+  ],
+  "properties": {
+    "blockedCommands": {
+      "description": "The blocked commands for regular players.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "$ref": "#/$defs/blocked-command-options"
+      }
+    },
+    "blockedOperatorCommands": {
+      "description": "The blocked commands for operators.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "$ref": "#/$defs/blocked-command-options"
+      }
+    }
+  }
+}

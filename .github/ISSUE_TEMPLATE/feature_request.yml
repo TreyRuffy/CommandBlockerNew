@@ -1,0 +1,59 @@
+name: Feature Request
+description: Suggest an idea for Command Blocker
+title: "[FEATURE] "
+labels: [ "enhancement" ]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Any bug reports should be reported in the bug report issue template.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the Request
+      description: A description of the feature and why it should be added.
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: If applicable, add screenshots to help explain your feature.
+    validations:
+      required: false
+
+  - type: dropdown
+    id: server-type
+    attributes:
+      label: Server Type
+      description: If applicable, what server type are you using?
+      options:
+        - Spigot / Paper (or forks)
+        - BungeeCord (or forks)
+        - Fabric / Quilt (or forks)
+        - Minecraft Forge
+        - NukkitX
+        - Sponge
+        - Velocity
+        - Other (list below)
+    validations:
+      required: false
+
+  - type: input
+    id: server-version
+    attributes:
+      label: Server Version
+      description: If applicable, what version of the server are you using?
+      placeholder: "For instance: Paper 1.19.3 build 376"
+    validations:
+      required: false
+
+  - type: textarea
+    id: other
+    attributes:
+      label: Additional Context
+      description: Please add any other context about the problem here.
+    validations:
+      required: false

@@ -1,37 +1,39 @@
-plugins {
-	id 'com.github.johnrengelman.shadow' version '7.0.0'
-	id 'java'
+apply plugin: "com.github.johnrengelman.shadow"
+
+repositories {
+  maven {
+    url = "https://oss.sonatype.org/content/repositories/snapshots"
+  }
 }
 
 dependencies {
-	implementation project(path: ':common', configuration: 'shadow')
-	api 'net.md-5:bungeecord-api:1.18-R0.1'
-	implementation('net.kyori:adventure-platform-bungeecord:4.0.1') {
-		exclude(module: 'adventure-bom')
-		exclude(module: 'adventure-api')
-		exclude(module: 'adventure-nbt')
-	}
+  api projects.common
+  api libs.adventure.platform.bungeecord
+  implementation libs.bungeecord
 }
 
 shadowJar {
-	archiveFileName = "CommandBlocker-Bungee-${project.ext.FULL_VERSION}.jar"
+  archiveFileName = "${rootProject.archives_base_name}-Bungee-${project.ext.FULL_VERSION}.jar"
 
-	dependencies {
-		include(dependency('me.treyruffy.commandblocker:.*'))
-		include(dependency('net.kyori:.*'))
-	}
+  dependencies {
+    include(dependency("me.treyruffy.commandblocker:.*"))
+    include(dependency("dev.triumphteam:.*"))
+    include(dependency("net.kyori:.*"))
+    include(dependency("org.spongepowered:.*"))
+    include(dependency("io.leangen.geantyref:.*"))
+  }
 
-	relocate 'net.kyori', 'me.treyruffy.commandblocker.libs.adventure'
-	relocate 'org.simpleyaml', 'me.treyruffy.commandblocker.libs.simpleyaml'
-	relocate 'org.yaml', 'me.treyruffy.commandblocker.libs.yaml'
+  relocate "net.kyori", "me.treyruffy.commandblocker.libs.kyori"
+  relocate "org.spongepowered.configurate", "me.treyruffy.commandblocker.libs.spongepowered"
+  relocate "io.leangen.geantyref", "me.treyruffy.commandblocker.libs.geantyref"
 }
 
 artifacts {
-	archives shadowJar
+  archives shadowJar
 }
 
 processResources {
-	filesMatching('bungee.yml') {
-		expand 'pluginVersion': project.ext.FULL_VERSION
-	}
+  filesMatching("bungee.yml") {
+    expand "pluginVersion": project.ext.FULL_VERSION
+  }
 }

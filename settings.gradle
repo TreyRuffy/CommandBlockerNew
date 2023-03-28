@@ -1,12 +1,22 @@
 rootProject.name = 'commandblocker'
 
+dependencyResolutionManagement {
+  repositories {
+    pluginManagement.repositories.each(it.&add)
+  }
+}
+
+enableFeaturePreview "TYPESAFE_PROJECT_ACCESSORS"
+
 include (
-	'api',
-	'common',
-	'bukkit',
-	//'bukkit-legacy',
-	//'bungee',
-	//'nukkit',
-	//'sponge',
-	//'velocity'
+  'api',
+  'common',
+  'bukkit',
+  'bukkit-legacy',
+  'bungee',
+  'nukkit',
+  'sponge7',
+  'sponge8',
+  'velocity'
 )
+

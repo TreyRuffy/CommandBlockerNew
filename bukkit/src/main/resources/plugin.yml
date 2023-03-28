@@ -2,6 +2,13 @@ name: CommandBlocker
 main: me.treyruffy.commandblocker.bukkit.CommandBlockerBukkit
 version: ${pluginVersion}
 api-version: 1.16
-
+description: CommandBlocker for Bukkit-based versions
+author: TreyRuffy
 softdepend:
   - PlaceholderAPI
+prefix: Command Blocker
+website: https://github.com/TreyRuffy/CommandBlocker
+commands:
+  commandblocker:
+    description: CommandBlocker commands
+    aliases: [cb, commandblockerbukkit, cbbukkit]

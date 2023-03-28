@@ -1,0 +1,104 @@
+name: Bug Report
+description: File a bug report
+title: "[BUG] "
+labels: [ "bug: unconfirmed" ]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before filling out the bug report, please make sure you are on the latest version.
+        Only use this form if you've found a bug and can reproduce the behavior.
+        If you think the issue is related to another issue, please comment there instead.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the Bug
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: Steps to reproduce the behavior.
+      placeholder: |
+        1. Open ...
+        2. Click on ...
+        3. Type ...
+        4. See error
+      render: bash
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: A clear and concise description of what you expected to happen.
+      placeholder: The program should ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: If applicable, add screenshots to help explain your problem.
+      placeholder: Add a link to a image sharing website or upload the images to GitHub.
+    validations:
+      required: false
+
+  - type: dropdown
+    id: server-type
+    attributes:
+      label: Server Type
+      description: What server type are you using?
+      options:
+        - Spigot / Paper (or forks)
+        - BungeeCord (or forks)
+        - Fabric / Quilt (or forks)
+        - Minecraft Forge
+        - NukkitX
+        - Sponge
+        - Velocity
+        - Other (list below)
+    validations:
+      required: true
+
+  - type: input
+    id: server-version
+    attributes:
+      label: Server Version
+      description: What version of the server are you using?
+      placeholder: "For instance: Paper 1.19.3 build 376"
+    validations:
+      required: true
+
+  - type: input
+    id: mod-version
+    attributes:
+      label: Mod Version
+      description: What version of Command Blocker you are using?
+      placeholder: "For instance: 2.0.0"
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Log Output
+      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
+      placeholder: "Please make sure you do not include any private data in your logs (IP addresses, Private Data, etc.)"
+      render: Shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: other
+    attributes:
+      label: Additional Context
+      description: Please add any other context about the problem here.
+    validations:
+      required: false

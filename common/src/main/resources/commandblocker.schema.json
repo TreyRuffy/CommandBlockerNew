@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://github.com/TreyRuffy/CommandBlocker/common/src/main/resources/commandblocker.schema.json",
+  "title": "Command Blocker config schema",
+  "description": "JSON Schema for Command Blocker config",
+  "type": "object",
+  "properties": {
+    "default": {
+      "description": "Default options for blocked commands.",
+      "type": "object",
+      "properties": {
+        "permission": {
+          "description": "The default permission for newly blocked commands.",
+          "type": "string",
+          "examples": ["commandblocker.allow.%command%"]
+        },
+        "messages": {
+          "description": "The default message(s) for newly blocked commands.",
+          "type": ["string", "array"],
+          "items": {
+            "type": "string"
+          },
+          "examples": [
+            "<red>You do not have permission to execute this command.",
+            "<red>This command cannot be executed at this time."
+          ]
+        }
+      }
+    },
+    "commands": {
+      "description": "Additional options for blocked commands",
+      "type": "object",
+      "properties": {
+        "forward": {
+          "description": "If true, the command will be forwarded from the proxy to the backend server. Only valid on Velocity.",
+          "type": "boolean"
+        }
+      }
+    },
+    "updates": {
+      "description": "The options for the update checker",
+      "type": "object",
+      "properties": {
+        "check": {
+          "description": "If true, the program will check for new versions.",
+          "type": "boolean"
+        },
+        "announceUpdates": {
+          "description": "If true, the program will announce updates to administrator accounts.",
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}
